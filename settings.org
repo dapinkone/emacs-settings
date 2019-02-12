@@ -18,9 +18,7 @@
    #+BEGIN_SRC emacs-lisp
    (dolist (package package-selected-packages)
    (unless (package-installed-p package)
-   (condition-case the-error (progn 
-     (package-install package))
-     (message "Init error: %s" (the-error)))))
+   (with-demoted-errors  "Init error: %s" (progn (package-install package)) )))
    #+END_SRC
 ** Customize
    All our customize stuff is over here. Load it, don't fuss about it.
