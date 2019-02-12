@@ -1,10 +1,29 @@
 * Credit: init setup forked from @PatchesPrime
 * General
+** Required packages:
+   #+BEGIN_SRC emacs-lisp
+         (setq package-selected-packages
+            (quote (exec-path-from-shell eglot lsp-java
+            java-imports java-snippets javadoc-lookup csv-mode jinja2-mode
+            highlight-indent-guides ac-racer undo-tree rainbow-delimiters racer
+            flycheck-rust cargo rust-mode org-agenda-property counsel swiper
+            ivy powerline doom-themes badger-theme column-enforce-mode 
+            web-mode eyebrowse exwm org-bullets
+            afternoon-theme smex magit expand-region elpy ace-window)))
+         ; activate all the packages (in particular autoloads)
+         (package-initialize)
+         (package-refresh-contents)
+   #+END_SRC
+** install any missing packages
+   #+BEGIN_SRC emacs-lisp
+   (dolist (package package-selected-packages)
+   (unless (package-installed-p package)
+   (condition-case the-error (progn 
+     (package-install package))
+     (message "Init error: %s" (the-error)))))
+   #+END_SRC
 ** Customize
-   Here is one I don't understand. In what world is it a good idea to stuff
-   all the customize changes into the regular init? Absolutely not happening
-   in my Madagascar.
-
+   All our customize stuff is over here. Load it, don't fuss about it.
    #+BEGIN_SRC emacs-lisp
    (setq custom-file "~/.emacs.d/custom.el")
    (load custom-file 'noerror)
@@ -23,7 +42,6 @@
     #+BEGIN_SRC emacs-lisp
     (global-set-key (kbd "M-o") 'ace-window)
     #+END_SRC
-
 
     Customize the binds for ace-window to be like avy
     #+BEGIN_SRC emacs-lisp
@@ -52,7 +70,6 @@
     (global-set-key (kbd "C-S-<down>") 'shrink-window)
     (global-set-key (kbd "C-S-<up>") 'enlarge-window)
     #+END_SRC
-    [2018-08-10]
 ** Themeing..theming? Colors.
    #+BEGIN_SRC emacs-lisp
   ;; (load-theme 'wheatgrass t)
