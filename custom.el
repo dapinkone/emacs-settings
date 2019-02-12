@@ -64,6 +64,9 @@
  '(org-fontify-done-headline t)
  '(org-fontify-quote-and-verse-blocks t)
  '(org-fontify-whole-heading-line t)
+ '(package-selected-packages
+   (quote
+    (exec-path-from-shell eglot lsp-java java-imports java-snippets javadoc-lookup csv-mode jinja2-mode highlight-indent-guides ac-racer undo-tree rainbow-delimiters racer flycheck-rust cargo rust-mode org-agenda-property counsel swiper ivy powerline badger-theme column-enforce-mode web-mode eyebrowse org-bullets afternoon-theme smex magit expand-region elpy ace-window)))
  '(password-cache-expiry 36000)
  '(pos-tip-background-color "#eee8d5")
  '(pos-tip-foreground-color "#586e75")

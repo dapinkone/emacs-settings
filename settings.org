@@ -7,8 +7,8 @@
             java-imports java-snippets javadoc-lookup csv-mode jinja2-mode
             highlight-indent-guides ac-racer undo-tree rainbow-delimiters racer
             flycheck-rust cargo rust-mode org-agenda-property counsel swiper
-            ivy powerline doom-themes badger-theme column-enforce-mode 
-            web-mode eyebrowse exwm org-bullets
+            ivy powerline badger-theme column-enforce-mode 
+            web-mode eyebrowse org-bullets
             afternoon-theme smex magit expand-region elpy ace-window)))
          ; activate all the packages (in particular autoloads)
          (package-initialize)
@@ -63,10 +63,11 @@
 ** Window/buffer movement
 *** window sizing
     #+BEGIN_SRC emacs-lisp
-    (global-set-key (kbd "C-S-<left>") 'shrink-window-horizontally)
-    (global-set-key (kbd "C-S-<right>") 'enlarge-window-horizontally)
-    (global-set-key (kbd "C-S-<down>") 'shrink-window)
-    (global-set-key (kbd "C-S-<up>") 'enlarge-window)
+      (toggle-frame-fullscreen)
+      (global-set-key (kbd "C-S-<left>") 'shrink-window-horizontally)
+      (global-set-key (kbd "C-S-<right>") 'enlarge-window-horizontally)
+      (global-set-key (kbd "C-S-<down>") 'shrink-window)
+      (global-set-key (kbd "C-S-<up>") 'enlarge-window)
     #+END_SRC
 ** Themeing..theming? Colors.
    #+BEGIN_SRC emacs-lisp
@@ -74,7 +75,7 @@
   (load-theme 'afternoon)
   (doom-themes-visual-bell-config)
    #+END_SRC
-
+   
    The default font size is way too big in my opinion, so we lower it a tad.
 
    #+BEGIN_SRC emacs-lisp
@@ -248,9 +249,8 @@
     (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
     (setq highlight-indent-guides-method 'column)
     #+END_SRC
-   
-* Git
-** Magit
+    
+* Magit
 *** after-save refresh status
     #+BEGIN_SRC emacs-lisp
     (add-hook 'after-save-hook 'magit-after-save-refresh-status)
