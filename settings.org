@@ -53,52 +53,45 @@
     (global-set-key (kbd "C-S-<up>") 'enlarge-window)
     #+END_SRC
     [2018-08-10]
-** Themeing..theming? Colors and shit.
-   I use a variety of themes that suit my fancy. I like doom-one, afternoon,
-   dracula, hell even gotham is neat sometimes. Right now it's this one..
-
+** Themeing..theming? Colors.
    #+BEGIN_SRC emacs-lisp
   ;; (load-theme 'wheatgrass t)
   (load-theme 'afternoon)
   (doom-themes-visual-bell-config)
    #+END_SRC
 
-   The default font size is way to big in my opinion, so we lower it a tad.
+   The default font size is way too big in my opinion, so we lower it a tad.
 
    #+BEGIN_SRC emacs-lisp
    (set-face-attribute 'default nil :height 150)
-;;   (set-frame-font "DroidSansMono")
    #+END_SRC
 
-** Ivy ## is broken ;_;
+** Ivy
    Ivy is everything I love about emacs. It's fast, useful, and very customizable.
 
    #+BEGIN_SRC emacs-lisp
    (ivy-mode 1)
    #+END_SRC
 
-   - Useful variables.
-     ivy-use-virtual-buffers adds recent files and bookmarks to the switch buffer.
-
+***  Useful variables.
+**** ivy-use-virtual-buffers adds recent files and bookmarks to the switch buffer.
      #+BEGIN_SRC emacs-lisp
      (setq ivy-use-virtual-buffers t)
      #+END_SRC
 
-     enable-recursive-minibuffers allows minibuffer commands while IN the minibuffer.
-
+**** enable-recursive-minibuffers allows minibuffer commands while IN the minibuffer.
      #+BEGIN_SRC emacs-lisp
      (setq enable-recursive-minibuffers t)
      #+END_SRC
 
-     ivy-initial-inputs-alist adds the '^' character to the beginning of a bunch of
+**** ivy-initial-inputs-alist adds the '^' character to the beginning of a bunch of
      commands involving the minibuffer. I don't need this. I will ask for it explicitly
      if I want it.
-
      #+BEGIN_SRC emacs-lisp
      (setq ivy-initial-inputs-alist nil)
      #+END_SRC
 
-   - Keybinds
+**** Keybinds
      #+BEGIN_SRC emacs-lisp
      (global-set-key "\C-s" 'swiper)
      (global-set-key (kbd "C-c C-r") 'ivy-resume)
@@ -115,6 +108,7 @@
      (global-set-key (kbd "C-r") 'counsel-minibuffer-history)
      (global-set-key (kbd "M-y") 'counsel-yank-pop)
      #+END_SRC
+
 ** Org
    Use org-bullets.
 
@@ -167,128 +161,106 @@
     (elpy-enable)
     #+END_SRC
     
-    I prefer python3.
-    #+BEGIN_SRC emacs_lisp
-    (setq elpy-rpc-python-command "python3")
-    #+END_SRC
+**** Tell elpy we use python3.
+     #+BEGIN_SRC emacs_lisp
+     (setq elpy-rpc-python-command "python3")
+     #+END_SRC
 
+**** Tell elpy where/how to run unit-tests.
+     #+BEGIN_SRC emacs-lisp
+     (setq elpy-test-discover-runner-command (quote ("python" "-m" "unittest")))
+     #+END_SRC
 
-    Tell elpy where/how to run unit-tests.
+**** This highlights any columns which are 80+ columns.
     #+BEGIN_SRC emacs-lisp
-      (setq elpy-test-discover-runner-command (quote ("python" "-m" "unittest")))
-
+    (require 'column-enforce-mode)
+    (add-hook 'python-mode-hook 'column-enforce-mode)
+    (setq column-enforce-column 79)
     #+END_SRC
-
-   I really like pep8's column width restriction. Rust doesn't.
-   This highlights any columns which are 80+ columns.
-   #+BEGIN_SRC emacs-lisp
-     (require 'column-enforce-mode)
-     (add-hook 'python-mode-hook 'column-enforce-mode)
-     (setq column-enforce-column 79)
-   #+END_SRC
 
 ** Rust
-   We develop in rust.
-
+   We develop in rust?
    #+BEGIN_SRC emacs-lisp
    (require 'rust-mode)
    #+END_SRC
-
-**** Racer
-     Set up the important variables around racer. 'racer' is the autocompletion
-     framework for Rust.
-
-     Start the appropriate racer modes when entering rust-mode.
-
-     #+BEGIN_SRC emacs-lisp
-     (add-hook 'rust-mode-hook #'racer-mode)
-     (add-hook 'racer-mode-hook #'eldoc-mode)
-     #+END_SRC
-
-     Interface with company-mode to provide completion.
-
-     #+BEGIN_SRC emacs-lisp
-       ;; (add-hook 'racer-mode-hook #'company-mode) ;; too slow :(
-       (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
-       (setq company-tooltip-align-annotations t)
-       (define-key rust-mode-map (kbd "C-c C-c") #'rust-compile)
-       (add-hook 'rust-mode-hook (lambda ()
-                                   (add-hook 'before-save-hook 'rust-format-buffer)))
-     #+END_SRC
-     
-      syntax error highlighting for rust
+*** racer: autocompletion for Rust.
+**** Start the appropriate racer modes when entering rust-mode.
+    #+BEGIN_SRC emacs-lisp
+    (add-hook 'rust-mode-hook #'racer-mode)
+    (add-hook 'racer-mode-hook #'eldoc-mode)
+    #+END_SRC
+**** Interface with company-mode to provide completion.
+    #+BEGIN_SRC emacs-lisp
+      ;; (add-hook 'racer-mode-hook #'company-mode) ;; too slow :(
+      (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+      (setq company-tooltip-align-annotations t)
+      (define-key rust-mode-map (kbd "C-c C-c") #'rust-compile)
+      (add-hook 'rust-mode-hook (lambda ()
+                                  (add-hook 'before-save-hook 'rust-format-buffer)))
+    #+END_SRC
+****  syntax error highlighting for rust
       #+BEGIN_SRC emacs-lisp
        (with-eval-after-load 'rust-mode
          (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
      #+END_SRC
 
 ** C programming
-   code formatting standard for C
-   #+BEGIN_SRC emacs-lisp
-   (setq-default c-basic-offset 4)
-   (c-set-offset 'case-label '+)
-   (setq c-default-style "linux" c-basic-offset 4)
-   #+END_SRC
+*** code formatting standard for C
+    #+BEGIN_SRC emacs-lisp
+    (setq-default c-basic-offset 4)
+    (c-set-offset 'case-label '+)
+    (setq c-default-style "linux" c-basic-offset 4)
+    #+END_SRC
 
 ** misc programming defaults
-
-   This helps me keep my delimiters straight when I'm going deep.
-   #+BEGIN_SRC emacs-lisp
-   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-   (setq show-paren-mode t)
-   #+END_SRC
-
-   Cleanup whitespace on save.
-   #+BEGIN_SRC emacs-lisp
-   (add-hook 'prog-mode-hook
-   (lambda ()
-   (add-hook 'before-save-hook 'delete-trailing-whitespace nil t)))
-   #+END_SRC
-
-   Tabs are a sin.     
-   #+BEGIN_SRC emacs-lisp
-   (setq-default indent-tabs-mode nil)
-   #+END_SRC
-
-   Show indentation more visibly.
-   #+BEGIN_SRC emacs-lisp
-   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
-   (setq highlight-indent-guides-method 'column)
-   #+END_SRC
-
+*** This helps me keep my delimiters straight when I'm going deep.
+    #+BEGIN_SRC emacs-lisp
+    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+    (setq show-paren-mode t)
+    #+END_SRC
+*** Cleanup whitespace on save.
+    #+BEGIN_SRC emacs-lisp
+    (add-hook 'prog-mode-hook
+    (lambda ()
+    (add-hook 'before-save-hook 'delete-trailing-whitespace nil t)))
+    #+END_SRC
+*** Tabs are a sin.     
+    #+BEGIN_SRC emacs-lisp
+    (setq-default indent-tabs-mode nil)
+    #+END_SRC
+*** Show indentation more visibly.
+    #+BEGIN_SRC emacs-lisp
+    (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+    (setq highlight-indent-guides-method 'column)
+    #+END_SRC
    
 * Git
 ** Magit
-   I'm sure there are a lot more complicated setups for managing ones git
-   repositories, but honestly default magit is pretty much all I need. I do
-   have this simple hook however.
-
-   #+BEGIN_SRC emacs-lisp
-   (add-hook 'after-save-hook 'magit-after-save-refresh-status)
-   #+END_SRC
-
-   magit entry-point
-   #+BEGIN_SRC emacs-lisp
-   (global-set-key (kbd "C-x g") 'magit-status)
-   #+END_SRC
+*** after-save refresh status
+    #+BEGIN_SRC emacs-lisp
+    (add-hook 'after-save-hook 'magit-after-save-refresh-status)
+    #+END_SRC
+*** magit entry-point, magit-status keybind C-x g
+    #+BEGIN_SRC emacs-lisp
+    (global-set-key (kbd "C-x g") 'magit-status)
+    #+END_SRC
 * Macros
-  
-   bind to assist with fixing indentation
+** bind to assist with fixing indentation <f9>
    #+BEGIN_SRC emacs-lisp
      (fset 'indent-generic [tab ?\C-a ?\C-n])
      (global-set-key (kbd "<f9>") 'indent-generic)    ;;
    #+END_SRC
-   
-   colapse spacing
-   #+BEGIN_SRC emacs-lisp
-     (fset 'colapse-spacing
-           "\C-[xdelete-horizontal-space\C-m ")
-     (global-set-key (kbd "C-c C-SPC") 'colapse-spacing)
-   #+END_SRC
-   
-   command to insert today's date.
-   #+BEGIN_SRC emacs-lisp
-     (defun insert-current-date () (interactive)
-            (insert (shell-command-to-string "echo -n $(date +%Y-%m-%d)")))
-   #+END_SRC
-   
+
+** colapse spacing C-c C-SPC
+  #+BEGIN_SRC emacs-lisp
+    (fset 'colapse-spacing
+          "\C-[xdelete-horizontal-space\C-m ")
+    (global-set-key (kbd "C-c C-SPC") 'colapse-spacing)
+  #+END_SRC
+
+** command to insert today's date. insert-current-date
+  #+BEGIN_SRC emacs-lisp
+    (defun insert-current-date () (interactive)
+           (insert (shell-command-to-string "echo -n $(date +%Y-%m-%d)")))
+  #+END_SRC
+ 
