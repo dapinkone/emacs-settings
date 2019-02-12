@@ -3,3 +3,4 @@
 !/custom.el
 !/org-settings.el
 !/.gitignore
+!/init.el
