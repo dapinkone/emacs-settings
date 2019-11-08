@@ -59,6 +59,26 @@
 (global-set-key (kbd "C-S-<down>") 'shrink-window)
 (global-set-key (kbd "C-S-<up>") 'enlarge-window)
 
+;; credit for move-line-up and move-line down:
+;; https://emacsredux.com/blog/2013/04/02/move-current-line-up-or-down/
+(defun move-line-up ()
+  "Move up the current line."
+  (interactive)
+  (transpose-lines 1)
+  (forward-line -2)
+  (indent-according-to-mode))
+
+(defun move-line-down ()
+  "Move down the current line."
+  (interactive)
+  (forward-line 1)
+  (transpose-lines 1)
+  (forward-line -1)
+  (indent-according-to-mode))
+
+(global-set-key (kbd "C-M-<up>") 'move-line-up)
+(global-set-key (kbd "C-M-<down>") 'move-line-down)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Python programming
 
@@ -87,7 +107,7 @@
 (defun cpp-compile ()
   "Compile using `g++` and run"
   (interactive)
-  (compile (format "g++ %s -o bin" (buffer-file-name))))
+  (compile (format "g++ %s -Wall -Wextra -Wpedantic -Wconversion -std=c++17 -O2 -o bin" (buffer-file-name))))
 
 (define-key c-mode-base-map (kbd "C-c C-c") #'cpp-compile)
 ;;; rtag sounds neat, but it just don't build :<
@@ -137,6 +157,9 @@
 
 ;; show line numbers.
 (add-hook 'prog-mode-hook 'linum-mode)
+
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Misc macros I have found useful.
