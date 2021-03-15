@@ -5,10 +5,12 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector
    ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
- '(custom-enabled-themes (quote (wheatgrass)))
+ '(custom-enabled-themes (quote (tango-dark)))
  '(package-selected-packages
    (quote
-    (highlight-indentation python-black flycheck flymake-python-pyflakes flymake-rust rust-mode elpy rainbow-delimiters ace-window org-bullets)))
+    (flymake-python-pyflakes flycheck python-black go-tag go-impl go-mode go-playground go-rename elpy avy ace-window org-bullets use-package)))
+ '(python-shell-exec-path nil)
+ '(python-shell-interpreter "python3")
  '(recentf-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

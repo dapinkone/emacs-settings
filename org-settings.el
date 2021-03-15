@@ -1,27 +1,26 @@
 ;; GTD org agenda stuff.
 ;; credit where due:
 ;; https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html
-(setq org-agenda-files '("~/s/gtd/inbox.org"
-                         "~/s/gtd/gtd.org"
-                         "~/s/gtd/tickler.org"))
+;; (setq org-agenda-files '("~/s/gtd/inbox.org"
+;;                          "~/s/gtd/gtd.org"
+;;                          "~/s/gtd/tickler.org"))
 
-(setq org-capture-templates '(("t" "Todo [inbox]" entry
-                               (file+headline "~/s/gtd/inbox.org" "Tasks")
-                               "* TODO %i%?")
-                              ("T" "Tickler" entry
-                               (file+headline "~/s/gtd/tickler.org" "Tickler")
-                               "* %i%? \n %U")))
+;; (setq org-capture-templates '(("t" "Todo [inbox]" entry
+;;                                (file+headline "~/s/gtd/inbox.org" "Tasks")
+;;                                "* TODO %i%?")
+;;                               ("T" "Tickler" entry
+;;                                (file+headline "~/s/gtd/tickler.org" "Tickler")
+;;                                "* %i%? \n %U")))
 
-;; what is (max)level doing here?
-(setq org-refile-targets '(("~/s/gtd/gtd.org" :maxlevel . 3)
-                           ("~/s/gtd/someday.org" :level .1)
-                           ("~/s/gtd/tickler.org" :maxlevel .2)))
+;; ;; what is (max)level doing here?
+;; (setq org-refile-targets '(("~/s/gtd/gtd.org" :maxlevel . 3)
+;;                            ("~/s/gtd/someday.org" :level .1)
+;;                            ("~/s/gtd/tickler.org" :maxlevel .2)))
 
 (setq org-todo-keywords
    (quote
     ((sequence "TODO" "INWK" "HOLD" "NEXT"
                "|" "✘CAN" "✔DONE"))))
-
 
 (setq org-agenda-custom-commands
       '(("o" "At the office" tags-todo "@office"
