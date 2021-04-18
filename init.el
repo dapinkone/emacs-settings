@@ -101,6 +101,82 @@
 ;(add-hook 'c-mode-hook 'rtags-start-process-unless-running)
 ;(add-hook 'c++-mode-hook 'rtags-start-process-unless-running)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; golang
+;; go land!
+;; deps: gopls, goimport, go-guru
+;; todo - some major touchups. Let's break all the requires out.
+;; TODO ensures.
+(use-package go-mode
+  :ensure t
+  :bind
+  (:map go-mode-map
+        ("C-c d" . lsp-describe-thing-at-point)
+        ("C-c g" . godoc)
+        ("C-i" . company-indent-or-complete-common)
+        ("C-M-i" . company-indent-or-complete-common)
+        ("M-." . godef-jump)
+        ("M-*" . pop-tag-mark))
+
+  :init ;; changed from config
+  (setq gofmt-command "gofmt"     ; use goimports or gofmt
+        company-idle-delay nil)	; avoid auto completion popup, use TAB
+                                        ; to show it
+  (setq company-minimum-prefix-length 2)
+  (add-hook 'before-save-hook #'gofmt-before-save)
+  (add-hook 'go-mode-hook 'yas-minor-mode)
+
+
+  ;; eldoc
+  (require 'go-eldoc)
+  (add-hook 'go-mode-hook 'go-eldoc-setup)
+  ;; ;; guru
+  (require 'go-guru)
+
+  ;; ;; completion
+  (require 'lsp)
+  (add-hook 'go-mode-hook #'lsp)
+  )
+(setq-default tab-width 4)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; LSP mode
+(use-package lsp-mode
+  :ensure
+  :commands lsp
+  :custom
+  (lsp-eldoc-render-all t)
+  (lsp-idle-delay 0.6)
+  (lsp-rust-analyzer-server-display-inlay-hints t)
+  :bind
+  (:map lsp-mode-map
+        ("C-M-j" . lsp-ui-imenu)) ;; show a handy outline of the code structure.
+  :config
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
+(use-package lsp-ui
+  :ensure
+  :commands lsp-ui-mode
+  :custom
+  (lsp-ui-peek-always-show t)
+  (lsp-ui-sideline-show-hover t)
+  (lsp-ui-doc-enable nil))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Company-mode
+(use-package company
+  :ensure
+  :custom
+  (company-idle-delay 0.5) ;; how long to wait until popup
+  ;; (company-begin-commands nil) ;; uncomment to disable popup
+  :bind
+  (:map company-active-map
+	      ("C-n". company-select-next)
+	      ("C-p". company-select-previous)
+	      ("M-<". company-select-first)
+	      ("M->". company-select-last))
+  (:map company-mode-map
+	("<tab>". tab-indent-or-complete)
+	("TAB". tab-indent-or-complete)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Mobility
@@ -138,6 +214,7 @@
 
 (global-set-key (kbd "C-M-<up>") 'move-line-up)
 (global-set-key (kbd "C-M-<down>") 'move-line-down)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; misc programming preferences.
 
@@ -147,7 +224,7 @@
 	    (add-hook 'before-save-hook 'delete-trailing-whitespace nil t)))
 
 ;; tabs? spaces.
-(setq-default indent-tabs-mode nil)
+;(setq-default indent-tabs-mode t)
 
 ;; pretty up some indentation levels
 (add-hook 'prog-mode-hook 'highlight-indentation-mode)
@@ -159,6 +236,50 @@
 
 ;; show line numbers.
 (add-hook 'prog-mode-hook 'linum-mode)
+
+
+;;:::::::::::::::::::::::::::::::
+;; Yasnippet
+(use-package yasnippet
+  :ensure
+  :config
+  (yas-reload-all)
+  (add-hook 'prog-mode-hook 'yas-minor-mode)
+  (add-hook 'text-mode-hook 'yas-minor-mode))
+
+;; a little helper function
+(defun company-yasnippet-or-completion ()
+  (interactive)
+  (or (do-yas-expand)
+      (company-complete-common)))
+(defun check-expansion ()
+  (save-excursion
+    (if (looking-at "\\_>") t
+      (backward-char 1)
+      (if (looking-at "\\.") t
+        (backward-char 1)
+        (if (looking-at "::") t nil)))))
+
+(defun do-yas-expand ()
+  (let ((yas/fallback-behavior 'return-nil))
+    (yas/expand)))
+
+(defun tab-indent-or-complete ()
+  (interactive)
+  (if (minibufferp)
+      (minibuffer-complete)
+    (if (or (not yas/minor-mode)
+            (null (do-yas-expand)))
+        (if (check-expansion)
+            (company-complete-common)
+          (indent-for-tab-command)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; magit
+(use-package magit
+  :ensure)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Misc macros I have found useful.
 
