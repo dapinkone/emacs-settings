@@ -107,6 +107,9 @@
 ;; deps: gopls, goimport, go-guru
 ;; todo - some major touchups. Let's break all the requires out.
 ;; TODO ensures.
+(defun run-go-tests () (interactive)
+	   (async-shell-command "go test -v"))
+
 (use-package go-mode
   :ensure t
   :bind
@@ -116,7 +119,9 @@
         ("C-i" . company-indent-or-complete-common)
         ("C-M-i" . company-indent-or-complete-common)
         ("M-." . godef-jump)
-        ("M-*" . pop-tag-mark))
+        ("M-*" . pop-tag-mark)
+		("C-c C-c" . run-go-tests)
+		)
 
   :init ;; changed from config
   (setq gofmt-command "gofmt"     ; use goimports or gofmt
