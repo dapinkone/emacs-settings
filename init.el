@@ -142,7 +142,7 @@
   (require 'lsp)
   (add-hook 'go-mode-hook #'lsp)
   )
-(setq-default tab-width 4)
+(setq-default tab-width 3)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LSP mode
 (use-package lsp-mode
