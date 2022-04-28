@@ -1,5 +1,5 @@
 (package-initialize)
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3") ; bug fixed in emacs 26.3
+
 (require 'package)
 (add-to-list 'package-archives
 	     '("elpy" . "https://jorgenschaefer.github.io/packages/"))
