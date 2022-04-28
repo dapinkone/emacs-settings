@@ -39,7 +39,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; GUI settings
-
+(setq frame-resize-pixelwise t) ; by default emacs rounds frame size to nearest char height. this is no.
 (set-face-attribute 'default nil :height 150)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
@@ -72,10 +72,11 @@
 (use-package python-black :ensure t)
 (use-package flycheck :ensure t)
 (use-package flymake-python-pyflakes :ensure t)
+(add-hook 'python-mode-hook (setq intent-tabs-mode t) (setq tab-width 4))
 
 ;; autoformat buffer.
-;; (add-hook 'python-mode-hook (lambda ()
-;;                             (add-hook 'before-save-hook 'python-black-buffer)))
+(add-hook 'python-mode-hook (lambda ()
+                             (add-hook 'before-save-hook 'python-black-buffer)))
 
 
 
