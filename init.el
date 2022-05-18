@@ -39,7 +39,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; GUI settings
-(setq frame-resize-pixelwise t) ; by default emacs rounds frame size to nearest char height. this is no.
+; by default emacs rounds frame size to nearest char height. ~~this is no.~~ is no for GUI. required for console.
+;(setq frame-resize-pixelwise t)
 (set-face-attribute 'default nil :height 150)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
@@ -144,6 +145,7 @@
   (add-hook 'go-mode-hook #'lsp)
   )
 (setq-default tab-width 3)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LSP mode
 (use-package lsp-mode
@@ -300,3 +302,17 @@
 
 (defun insert-current-date () (interactive)
               (insert (shell-command-to-string "echo -n $(date +%Y-%m-%d)")))
+(defun close-all-parentheses ()
+  (interactive "*")
+  (let ((closing nil))
+    (save-excursion
+      (while (condition-case nil
+         (progn
+           (backward-up-list)
+           (let ((syntax (syntax-after (point))))
+             (cl-case (car syntax)
+               ((4) (setq closing (cons (cdr syntax) closing)))
+               ((7 8) (setq closing (cons (char-after (point)) closing)))))
+           t)
+           ((scan-error) nil))))
+    (apply #'insert (nreverse closing))))
