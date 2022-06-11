@@ -75,9 +75,9 @@
 (use-package flymake-python-pyflakes :ensure t)
 (add-hook 'python-mode-hook (setq intent-tabs-mode t) (setq tab-width 4))
 
-;; autoformat buffer.
-(add-hook 'python-mode-hook (lambda ()
-                             (add-hook 'before-save-hook 'python-black-buffer)))
+;; autoformat buffer. TODO: make minor-mode for auto-format on save
+;(add-hook 'python-mode-hook (lambda ()
+;                             (add-hook 'before-save-hook 'python-black-buffer)))
 
 
 
