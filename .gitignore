@@ -4,3 +4,5 @@
 !/org-settings.el
 !/.gitignore
 !/init.el
+!/elpa
+!/elpy
